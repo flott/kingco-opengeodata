@@ -1,21 +1,32 @@
 # kingco-opengeodata
 
-**this isn't ready to use yet**
+**This isn't ready to use yet!!!**
 
 Tools for converting King County's public GIS data into modern open source formats
-`mkdir zip`
+
+## Downloading and organizing the data
+
+`mkdir zip && cd zip`
+
 download all the gdbs using `wget -i gdb_urls.txt`
+
 and unzip all of them with `unzip \*.zip`
 
 This makes a ton of folders with geodatabases inside, along with metadata.
-move all of the gdbs to a single directory
-navigate to top level folder
+
+
 
 `mkdir gdb`
 
 `mkdir gpkg`
 
-`find . - find ./zip -name '*.gdb' -prune -exec mv {} ./gdb \;name '*.gdb' -exec mv {} ./gdb \;`
+- navigate to top level folder
+- move all of the gdbs to a single directory: 
+
+    `find . - find ./zip -name '*.gdb' -prune -exec mv {} ./gdb \;name '*.gdb' -exec mv {} ./gdb \;`
+
+
+Rename all those gdbs so they're just called the simple names like "admin" or "hydro"
 
 `rename -n 's/KingCounty_GDB_//' *.gdb`
 
