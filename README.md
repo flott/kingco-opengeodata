@@ -23,7 +23,7 @@ This makes a ton of folders with geodatabases inside, along with metadata.
 - navigate to top level folder
 - move all of the gdbs to a single directory: 
 
-    `find . - find ./zip -name '*.gdb' -prune -exec mv {} ./gdb \;name '*.gdb' -exec mv {} ./gdb \;`
+    `find . - find ./zip -name '*.gdb' -prune -exec mv {} ./gdb \;`
 
 
 Rename all those gdbs so they're just called the simple names like "admin" or "hydro"
