@@ -1,0 +1,16 @@
+ftp://ftp.kingcounty.gov/gis-web/GISData/adminGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/censusGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/districtGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/enviroGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/hydroGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/natresGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/planningGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/politiclGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/propertyGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/pubsafeGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/recreatnGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/surveyGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/topoGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/transportationGDB.zip
+ftp://ftp.kingcounty.gov/gis-web/GISData/utilityGDB.zip
+
