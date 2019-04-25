@@ -2,9 +2,11 @@
 
 **This isn't ready to use yet!!!**
 
-Tools for converting King County's public GIS data into modern open source formats
+Tools for converting King County's public GIS data into modern open source formats. It's essentially a wrapper for ogr2ogr to loop over multiple file geodatabases.
 
 ## Downloading and organizing the data
+
+*These are just my own notes for now. A script will handle this part.*
 
 `mkdir zip && cd zip`
 
@@ -34,5 +36,7 @@ or
 
 `rename -n 's/KingCounty_GDB_(\w+)/$1/' *.gdb`
 
+## ogr2ogr examples
 sample command for a single conversion:
+
 `ogr2ogr -f "GPKG" -progress -dsco VERSION=1.2 admin.gpkg KingCounty_GDB_admin.gdb`

@@ -15,7 +15,7 @@ import fiona
 
 
 # this will be the function for a single input and output feature
-def convert_gdb(gdb, feature):
+def convert_gdb_feature(gdb, feature):
     """
     constructs the ogr2ogr command to convert a single feature.
     """
@@ -31,7 +31,6 @@ def convert_gdb(gdb, feature):
 parser = argparse.ArgumentParser(
     description='Convert a FileGDB to GeoPackage.')
 
-# TODO: will check this with glob
 parser.add_argument('in_gdb', type=str,
                     help='Source FileGDB file or directory')
 
@@ -40,8 +39,7 @@ parser.add_argument(
     'out_dir', type=str, help='Destination directory for GeoPackages')
 
 # expected behavior: make one geopackage per feature.
-# if postgis, ignore? or don't import to a schema
-# and prefix with the gdb name
+# if postgis, ignore. it has to cycle through all layers regardless.
 parser.add_argument(
     '-s',
     '--splitgdb',
@@ -50,11 +48,11 @@ parser.add_argument(
 
 # might be a bad idea as an optional argument because
 # of potential name conflicts
-parser.add_argument(
-    '-p',
-    '--noprefix',
-    action='store_true',
-    help='Remove the source FileGDB name prefix on output gpkg')
+# parser.add_argument(
+#     '-p',
+#     '--noprefix',
+#     action='store_true',
+#     help='Remove the source FileGDB thematic name prefix on output gpkg')
 
 args = parser.parse_args()
 
@@ -84,4 +82,4 @@ else:
 for gdb in gdb_list:
     for layer in fiona.listlayers(gdb):
         print("processing", layer)
-        convert_gdb(gdb, layer)
+        convert_gdb_feature(gdb, layer)
