@@ -99,7 +99,7 @@ for theme in themes:
     try:
         totalSize = ftp.size(zipf)
         print(totalSize)
-        with open(os.join(args.out_dir,zipf), 'wb') as local_file:
+        with open(os.path.join(args.out_dir,zipf), 'wb') as local_file:
             ftp.retrbinary("RETR " + zipf, download_file)
             local_file.close()
         pass
