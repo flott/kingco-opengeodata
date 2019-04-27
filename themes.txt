@@ -1,3 +1,8 @@
+# These are the thematic categories available
+# from King County's GIS Data Portal
+# https://www5.kingcounty.gov/gisdataportal/
+
+# Skip a theme by commenting the line with # at the beginning.
 admin
 census
 district

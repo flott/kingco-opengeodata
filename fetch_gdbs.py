@@ -6,37 +6,59 @@ and organizes the contents.
 """
 
 from ftplib import FTP
-# import os
+import os
 import sys
-# import argparse
+import argparse
 
 # These are the standard thematic geodatabases
 # excluding the topographic contour lines.
-# zip_list = [
-#     'adminGDB.zip',
-#     'censusGDB.zip',
-#     'districtGDB.zip',
-#     'enviroGDB.zip',
-#     'hydroGDB.zip',
-#     'natresGDB.zip',
-#     'planningGDB.zip',
-#     'politiclGDB.zip',
-#     'propertyGDB.zip',
-#     'pubsafeGDB.zip',
-#     'recreatnGDB.zip',
-#     'surveyGDB.zip',
-#     'topoGDB.zip',
-#     'transportationGDB.zip',
-#     'utilityGDB.zip'
-# ]
+themes = [
+    'admin',
+    'census',
+    'district',
+    'enviro',
+    'hydro',
+    'natres',
+    'planning',
+    'politicl',
+    'property',
+    'pubsafe',
+    'recreatn',
+    'survey',
+    'topo',
+    'transportation',
+    'utility'
+]
 
-# TODO: this should read from a text file, like a simple config
-# list all of the themes, and comment out the ones you don't
-# want to download.
+# parse the arguments from the command line
+parser = argparse.ArgumentParser(
+    description='Download and organize thematic file geodatabases.')
 
-zip_list = ['districtGDB.zip']
+parser.add_argument(
+    'out_dir', nargs='?', type=str, default=os.getcwd(),
+    help='Destination directory')
 
-# TODO: catch errors
+parser.add_argument('--themes', nargs='+', choices=themes,
+        metavar='theme1 theme2',
+        help='List of themes to themes to download.' + \
+                'Choose from ' + ', '.join(themes))
+
+parser.add_argument('--theme-file', type=str,
+                    help='file with list of themes to download')
+
+args = parser.parse_args()
+
+if args.themes:
+    themes = args.themes
+
+if args.theme_file:
+    with open(args.theme_file) as f:
+        tlist = f.read().splitlines()
+        tlist_filtered = filter(None, [line for line in tlist if not(line.startswith('#'))])
+    # make sure it's only themes that are actually available.
+    themes = [t for t in tlist_filtered if t in themes]
+
+# TODO: catch errors in FTP
 ftp = FTP('ftp.kingcounty.gov')  # this also calls connect
 ftp.login()  # anonymous login
 ftp.cwd('gis-web/GISData/')
@@ -71,14 +93,17 @@ def download_file(block):
     update_progress(local_file.tell() / totalSize)
 
 
-for zipf in zip_list:
+for theme in themes:
+    print('Downloading ' + theme)
+    zipf = theme + 'GDB.zip'
     try:
         totalSize = ftp.size(zipf)
-        # sizeWritten = 0
-        with open(zipf, 'wb') as local_file:
+        print(totalSize)
+        with open(os.join(args.out_dir,zipf), 'wb') as local_file:
             ftp.retrbinary("RETR " + zipf, download_file)
             local_file.close()
+        pass
     except Exception:
-        print("whoops")
+        print("Error.")
 
 ftp.close()
