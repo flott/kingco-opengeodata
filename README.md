@@ -25,7 +25,9 @@ Tools for converting [King County's public GIS data](https://www5.kingcounty.gov
 - utility
 
 The script takes an output directory, and has two optional arguments:
+
 `--themes` takes a list of themes (e.g. `--themes admin hydro recreatn`)
+
 `--theme-file` allows you to specify a text file (see example `themes.txt`) with a list of themes that you would like to download.
 
 ## ogr2ogr examples for reference
