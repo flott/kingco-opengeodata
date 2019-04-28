@@ -9,6 +9,8 @@ from ftplib import FTP
 import os
 import sys
 import argparse
+from zipfile import ZipFile
+import shutil
 
 # These are the standard thematic geodatabases
 # excluding the topographic contour lines.
@@ -35,16 +37,16 @@ parser = argparse.ArgumentParser(
     description='Download and organize thematic file geodatabases.')
 
 parser.add_argument(
-    'out_dir', nargs='?', type=str, default=os.getcwd(),
+    'out_dir', nargs='?', type=str, default='.',
     help='Destination directory')
 
 parser.add_argument('--themes', nargs='+', choices=themes,
-        metavar='theme1 theme2',
-        help='List of themes to themes to download.' + \
+        metavar='THEME_NAME',
+        help='List of themes to themes to download. ' + \
                 'Choose from ' + ', '.join(themes))
 
 parser.add_argument('--theme-file', type=str,
-                    help='file with list of themes to download')
+                    help='text file with list of themes to download')
 
 args = parser.parse_args()
 
@@ -57,6 +59,12 @@ if args.theme_file:
         tlist_filtered = filter(None, [line for line in tlist if not(line.startswith('#'))])
     # make sure it's only themes that are actually available.
     themes = [t for t in tlist_filtered if t in themes]
+
+# switch the working directory to the download location
+out_dir = os.path.abspath(args.out_dir)
+if not os.path.isdir(out_dir):
+    os.makedirs(out_dir) 
+os.chdir(out_dir)
 
 # TODO: catch errors in FTP
 ftp = FTP('ftp.kingcounty.gov')  # this also calls connect
@@ -92,18 +100,47 @@ def download_file(block):
     local_file.write(block)
     update_progress(local_file.tell() / totalSize)
 
+# Make a zip folder if it doesn't exist. Move there
+zip_dir = os.path.join(out_dir,'zip')
+if not os.path.isdir(zip_dir):
+    os.makedirs(zip_dir)
 
 for theme in themes:
     print('Downloading ' + theme)
     zipf = theme + 'GDB.zip'
     try:
         totalSize = ftp.size(zipf)
-        print(totalSize)
-        with open(os.path.join(args.out_dir,zipf), 'wb') as local_file:
+        with open(os.path.join(zip_dir,theme + 'GDB.zip'), 'wb') as local_file:
             ftp.retrbinary("RETR " + zipf, download_file)
             local_file.close()
-        pass
     except Exception:
         print("Error.")
 
 ftp.close()
+
+# Unzip and move files
+gdb_dir = os.path.join(out_dir,'gdb')
+if not os.path.isdir(gdb_dir):
+    os.makedirs(gdb_dir)
+
+for theme in themes:
+    print('Extracting ' + theme)
+    # zip file that was just downloaded
+    zipf = os.path.join(zip_dir, theme + 'GDB.zip')
+    # name of the GDB inside that zip file
+    zip_gdb = 'KingCounty_GDB_' + theme + '.gdb/'
+    # local destination for the GDB contents
+    local_gdb = os.path.join(gdb_dir, theme + '.gdb/')
+
+    if not os.path.isdir(local_gdb):
+        os.makedirs(local_gdb)
+
+    with ZipFile(zipf, 'r') as gdbzip:
+        for f in gdbzip.namelist():
+            if f.startswith(theme + 'GDB/' + zip_gdb):
+                gdbf = os.path.split(f)
+                # TODO: find better way to skip directory
+                if gdbf[1]:
+                    src = gdbzip.open(f)
+                    with open(local_gdb + gdbf[1], 'wb') as dest:
+                        shutil.copyfileobj(src,dest)

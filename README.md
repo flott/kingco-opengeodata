@@ -1,42 +1,34 @@
 # kingco-opengeodata
 
-**This isn't ready to use yet!!!**
+**This isnt ready to use yet!!!**
 
-Tools for converting King County's public GIS data into modern open source formats. It's essentially a wrapper for ogr2ogr to loop over multiple file geodatabases.
+Tools for converting [King County's public GIS data](https://www5.kingcounty.gov/gisdataportal/) into modern open source formats. Its essentially a wrapper for `ogr2ogr` to loop over multiple file geodatabases.
 
 ## Downloading and organizing the data
 
-*These are just my own notes for now. A script will handle this part.*
+`fetch_gdbs.py` will download any of the available themes:
 
-`mkdir zip && cd zip`
+- admin
+- census
+- district
+- enviro
+- hydro
+- natres
+- planning
+- politicl
+- property
+- pubsafe
+- recreatn
+- survey
+- topo
+- transportation
+- utility
 
-download all the gdbs using `wget -i gdb_urls.txt`
+The script takes an output directory, and has two optional arguments:
+`--themes` takes a list of themes (e.g. `--themes admin hydro recreatn`)
+`--theme-file` allows you to specify a text file (see example `themes.txt`) with a list of themes that you would like to download.
 
-and unzip all of them with `unzip \*.zip`
-
-This makes a ton of folders with geodatabases inside, along with metadata.
-
-
-
-`mkdir gdb`
-
-`mkdir gpkg`
-
-- navigate to top level folder
-- move all of the gdbs to a single directory: 
-
-    `find ./zip -name '*.gdb' -prune -exec mv {} ./gdb \;`
-
-
-Rename all those gdbs so they're just called the simple names like "admin" or "hydro"
-
-`rename -n 's/KingCounty_GDB_//' *.gdb`
-
-or
-
-`rename -n 's/KingCounty_GDB_(\w+)/$1/' *.gdb`
-
-## ogr2ogr examples
+## ogr2ogr examples for reference
 sample command for a single conversion:
 
 `ogr2ogr -f "GPKG" -progress -dsco VERSION=1.2 admin.gpkg KingCounty_GDB_admin.gdb`
