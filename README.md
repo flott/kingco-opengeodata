@@ -1,8 +1,8 @@
 # kingco-opengeodata
 
-**This isnt ready to use yet!!!**
+**This isn't ready to use yet!!!**
 
-Tools for converting [King County's public GIS data](https://www5.kingcounty.gov/gisdataportal/) into modern open source formats. Its essentially a wrapper for `ogr2ogr` to loop over multiple file geodatabases.
+Tools for converting [King County's public GIS data](https://www5.kingcounty.gov/gisdataportal/) into modern open source formats. It's essentially a wrapper for `ogr2ogr` to loop over multiple file geodatabases.
 
 ## Downloading and organizing the data
 
