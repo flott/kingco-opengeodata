@@ -40,7 +40,7 @@ The script requires an output directory, and has two optional arguments:
 `--theme-file` allows you to specify a text file (see example `themes.txt`) with a list of themes that you would like to download.
 
 ### Examples
-- Download everything to ~/data: `get_kingco_gdbs.py ~/kcgis/` 
+- Download everything to ~/kcgis: `get_kingco_gdbs.py ~/kcgis/` 
 - Download just the census and political data: `get_kingco_gdbs.py  ~/kcgis/ --themes politicl census`
 - Download all the themes listed in a text file: `get_kingco_gdbs.py  ~/kcgis/ --theme-list themes.txt`
 
