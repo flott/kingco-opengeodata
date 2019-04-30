@@ -109,13 +109,16 @@ import argparse
 import os
 import glob
 import fiona
+import re
+import subprocess
 
 # set some overall ogr2ogr options
-opts_ogr2ogr = "-progress -a_srs EPSG:2926 -overwrite -nlt CONVERT_TO_LINEAR"
+opts_ogr2ogr = ["-progress", "-a_srs", "EPSG:2926",
+                "-overwrite", "-nlt", "CONVERT_TO_LINEAR"]
 # geopackage driver options
-opts_gpkg = "-dsco VERSION=1.2 -lco OVERWRITE=YES -gt 65536"
+opts_gpkg = ["-dsco", "VERSION=1.2", "-lco", "OVERWRITE=YES", "-gt", "65536"]
 # postgresql/postgis driver options
-opts_pg = "-lco SPATIAL_INDEX=YES"
+opts_pg = []  # ["-lco", "SPATIAL_INDEX=GIST"]
 
 
 # this will be the function for a single input and output feature
@@ -145,8 +148,9 @@ parser.add_argument('format', type=str, choices=['GPKG', 'PostgreSQL'],
 parser.add_argument('dest', type=str, help="""Output location. For GeoPackage,
                     this is a destination directory. For PostgreSQL this is
                     a connection string with the following form:
-                    PG:"dbname=databasename host=addr port=5432
+                    "PG:dbname=databasename host=addr port=5432
                     user=x password=y active_schema=public"
+                    Double quotes around the connection string are required.
                     If --split is used, the active schema will be changed
                     for each source geodatabase.
                     """)
@@ -172,14 +176,15 @@ args = parser.parse_args()
 src = os.path.abspath(args.src)
 
 # Make output directory if it doesn't exist
-if args.format == 'GPKG' and not os.path.isdir(os.path.abspath(args.dest)):
-    raise ValueError("Output directory does not exist.")
-    print("Output directory does not exist. Creating it.")
-    os.makedirs(os.path.abspath(args.dest))
+if args.format == 'GPKG':
+    if not os.path.isdir(os.path.abspath(args.dest)):
+        print("Output directory does not exist. Creating it.")
+        os.mkdir(os.path.abspath(args.dest))
+    dest_path = os.path.abspath(args.dest)
 
 # Check the input location to see if it's a single gdb or a directory
 if src.lower().endswith(".gdb"):
-    gdb_list = [src]
+    gdb_paths = [src]
 else:
     # just search within the one directory. don't do a recursive search.
     gdb_paths = glob.glob(os.path.join(src, "*.gdb"))
@@ -189,21 +194,36 @@ else:
 # For all except gpkg+split, fiona is not needed.
 for gdb in gdb_paths:
     theme = os.path.splitext(os.path.basename(gdb))[0]
+    print("Converting {}".format(theme))
 
     # gdb to gpkg
     if args.format == 'GPKG' and not args.split:
-        pass
+        subprocess.run(["ogr2ogr", "-f", args.format]
+                       + opts_ogr2ogr + opts_gpkg
+                       + [os.path.join(dest_path, theme + ".gpkg")]
+                       + [gdb])
 
     # gdb to multiple gpkgs
     elif args.format == 'GPKG' and args.split:
         for layer in fiona.listlayers(gdb):
-            print("processing", layer)
-            convert_gdb_feature(gdb, layer)
+            print("Extracting {}".format(layer))
+            subprocess.run(["ogr2ogr", "-f", args.format]
+                           + opts_ogr2ogr + opts_gpkg
+                           + [os.path.join(dest_path, layer + ".gpkg")]
+                           + [gdb] + [layer])
 
     # gdb to one postgres schema
     elif args.format == 'PostgreSQL' and not args.split:
-        pass
+        subprocess.run(["ogr2ogr", "-f", args.format]
+                       + opts_ogr2ogr + opts_pg
+                       + [args.dest]
+                       + [gdb])
 
     # gdb to multiple postgres schemas
     elif args.format == 'PostgreSQL' and args.split:
-        pass
+        pgconn = re.sub(r"active_schema=(\w+)",
+                        "active_schema=" + theme, args.dest)
+        subprocess.run(["ogr2ogr", "-f", args.format]
+                       + opts_ogr2ogr + opts_pg
+                       + [pgconn]
+                       + [gdb])

@@ -74,7 +74,7 @@ if not os.path.isdir(zip_dir):
     os.makedirs(zip_dir)
 
 for theme in themes:
-    print('Downloading ' + theme + '...')
+    print("Downloading {}...".format(theme))
     zipf = theme + 'GDB.zip'
     # if using urllib instead:
     zip_url = 'ftp://ftp.kingcounty.gov/gis-web/GISData/' + zipf
@@ -89,7 +89,7 @@ if not os.path.isdir(gdb_dir):
     os.makedirs(gdb_dir)
 
 for theme in themes:
-    print('Extracting ' + theme)
+    print("Extracting {}...".format(theme))
     # zip file that was just downloaded
     zipf = os.path.join(zip_dir, theme + 'GDB.zip')
     # name of the GDB inside that zip file
