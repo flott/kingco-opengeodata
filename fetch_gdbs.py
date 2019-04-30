@@ -41,9 +41,9 @@ parser.add_argument(
     help='Destination directory')
 
 parser.add_argument('--themes', nargs='+', choices=themes,
-        metavar='THEME_NAME',
-        help='List of themes to themes to download. ' + \
-                'Choose from ' + ', '.join(themes))
+                    metavar='THEME_NAME',
+                    help='List of themes to themes to download. '
+                    'Choose from ' + ', '.join(themes))
 
 parser.add_argument('--theme-file', type=str,
                     help='text file with list of themes to download')
@@ -56,14 +56,15 @@ if args.themes:
 if args.theme_file:
     with open(args.theme_file) as f:
         tlist = f.read().splitlines()
-        tlist_filtered = filter(None, [line for line in tlist if not(line.startswith('#'))])
+        tlist_filtered = filter(None, [line for line in tlist
+                                if not(line.startswith('#'))])
     # make sure it's only themes that are actually available.
     themes = [t for t in tlist_filtered if t in themes]
 
 # switch the working directory to the download location
 out_dir = os.path.abspath(args.out_dir)
 if not os.path.isdir(out_dir):
-    os.makedirs(out_dir) 
+    os.makedirs(out_dir)
 os.chdir(out_dir)
 
 # TODO: catch errors in FTP
@@ -100,8 +101,9 @@ def download_file(block):
     local_file.write(block)
     update_progress(local_file.tell() / totalSize)
 
-# Make a zip folder if it doesn't exist. Move there
-zip_dir = os.path.join(out_dir,'zip')
+
+# Make a zip folder if it doesn't exist.
+zip_dir = os.path.join(out_dir, 'zip')
 if not os.path.isdir(zip_dir):
     os.makedirs(zip_dir)
 
@@ -110,7 +112,8 @@ for theme in themes:
     zipf = theme + 'GDB.zip'
     try:
         totalSize = ftp.size(zipf)
-        with open(os.path.join(zip_dir,theme + 'GDB.zip'), 'wb') as local_file:
+        with open(os.path.join(zip_dir,
+                  theme + 'GDB.zip'), 'wb') as local_file:
             ftp.retrbinary("RETR " + zipf, download_file)
             local_file.close()
     except Exception:
@@ -119,7 +122,7 @@ for theme in themes:
 ftp.close()
 
 # Unzip and move files
-gdb_dir = os.path.join(out_dir,'gdb')
+gdb_dir = os.path.join(out_dir, 'gdb')
 if not os.path.isdir(gdb_dir):
     os.makedirs(gdb_dir)
 
@@ -143,4 +146,4 @@ for theme in themes:
                 if gdbf[1]:
                     src = gdbzip.open(f)
                     with open(local_gdb + gdbf[1], 'wb') as dest:
-                        shutil.copyfileobj(src,dest)
+                        shutil.copyfileobj(src, dest)
