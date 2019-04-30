@@ -5,12 +5,13 @@ Fetches zipped file geodatabases from King County's FTP server
 and organizes the contents.
 """
 
-from ftplib import FTP
+# Requires Python 3
+
 import os
-import sys
 import argparse
 from zipfile import ZipFile
 import shutil
+import urllib.request
 
 # These are the standard thematic geodatabases
 # excluding the topographic contour lines.
@@ -67,59 +68,20 @@ if not os.path.isdir(out_dir):
     os.makedirs(out_dir)
 os.chdir(out_dir)
 
-# TODO: catch errors in FTP
-ftp = FTP('ftp.kingcounty.gov')  # this also calls connect
-ftp.login()  # anonymous login
-ftp.cwd('gis-web/GISData/')
-
-
-# Progress bar copied from here and very slightly modified:
-# https://stackoverflow.com/questions/3160699/python-progress-bar
-def update_progress(progress):
-    barLength = 10  # Modify this to change the length of the progress bar
-    status = ""
-    if isinstance(progress, int):
-        progress = float(progress)
-    if not isinstance(progress, float):
-        progress = 0
-        status = "error: progress var must be float\r\n"
-    if progress < 0:
-        progress = 0
-        status = "Halt...\r\n"
-    if progress >= 1:
-        progress = 1
-        status = "Done.\r\n"
-    block = int(round(barLength * progress))
-    text = "\rProgress: [{0}] {1:03.1f}% {2}".format(
-        "#" * block + "-" * (barLength - block), progress * 100, status)
-    sys.stdout.write(text)
-    sys.stdout.flush()
-
-
-# This is the callback function for the FTP retrieval.
-def download_file(block):
-    local_file.write(block)
-    update_progress(local_file.tell() / totalSize)
-
-
 # Make a zip folder if it doesn't exist.
 zip_dir = os.path.join(out_dir, 'zip')
 if not os.path.isdir(zip_dir):
     os.makedirs(zip_dir)
 
 for theme in themes:
-    print('Downloading ' + theme)
+    print('Downloading ' + theme + '...')
     zipf = theme + 'GDB.zip'
-    try:
-        totalSize = ftp.size(zipf)
-        with open(os.path.join(zip_dir,
-                  theme + 'GDB.zip'), 'wb') as local_file:
-            ftp.retrbinary("RETR " + zipf, download_file)
-            local_file.close()
-    except Exception:
-        print("Error.")
-
-ftp.close()
+    # if using urllib instead:
+    zip_url = 'ftp://ftp.kingcounty.gov/gis-web/GISData/' + zipf
+    data = urllib.request.urlopen(zip_url).read()
+    with open(os.path.join(zip_dir, theme + 'GDB.zip'), 'wb') as local_file:
+        local_file.write(data)
+        local_file.close()
 
 # Unzip and move files
 gdb_dir = os.path.join(out_dir, 'gdb')
