@@ -41,15 +41,24 @@ parser.add_argument(
     'out_dir', nargs='?', type=str, default='.',
     help='Destination directory')
 
-parser.add_argument('--themes', nargs='+', choices=themes,
-                    metavar='THEME_NAME',
-                    help='List of themes to themes to download. '
-                    'Choose from ' + ', '.join(themes))
+group = parser.add_mutually_exclusive_group(required=True)
 
-parser.add_argument('--theme-file', type=str,
-                    help='text file with list of themes to download')
+group.add_argument('-a', '--all', action='store_true',
+                   help="Download all available theme geodatabases. "
+                   "About 2 GB of zip files.")
+
+group.add_argument('--themes', nargs='+', choices=themes,
+                   metavar='THEME_NAME',
+                   help='List of themes to themes to download. '
+                   'Choose from ' + ', '.join(themes))
+
+group.add_argument('--theme-file', type=str,
+                   help='text file with list of themes to download')
 
 args = parser.parse_args()
+
+if args.all:
+    themes = themes
 
 if args.themes:
     themes = args.themes
