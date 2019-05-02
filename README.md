@@ -33,14 +33,16 @@ For local, file-based use, there is [GeoPackage](http://www.geopackage.org/) out
 | transportation | Transportation |
 | utility | Utilities |
 
-The script requires an output directory, and has two optional arguments:
+The script requires an output directory, and has three download options:
+
+`--all` downloads all available themes. This is about 2 GB of zip files (6 GB uncompressed).
 
 `--themes` takes a list of themes (e.g. `--themes admin hydro recreatn`)
 
 `--theme-file` allows you to specify a text file (see example `themes.txt`) with a list of themes that you would like to download.
 
 ### Examples
-- Download everything to ~/kcgis: `get_kingco_gdbs.py ~/kcgis/` 
+- Download everything to ~/kcgis: `get_kingco_gdbs.py ~/kcgis/ --all` 
 - Download just the census and political data: `get_kingco_gdbs.py  ~/kcgis/ --themes politicl census`
 - Download all the themes listed in a text file: `get_kingco_gdbs.py  ~/kcgis/ --theme-list themes.txt`
 
@@ -49,11 +51,11 @@ The script requires an output directory, and has two optional arguments:
 
 `src` : Either a folder containing file geodatabases, or a path to a single geodatabase.
 
-`"GPKG"` or `"PostgreSQL"` (case sensitive): Output format
+`GPKG` or `PostgreSQL` (case sensitive): Output format
 
 `dest`: Output location. For GeoPackage, this is a destination directory. For PostgreSQL this is a connection string with the following form:                `"PG:dbname=databasename host=addr port=5432 user=x password=y active_schema=public"` Double quotes around the connection string are required. If `--split` is used (see below), the active schema will be changed for each source geodatabase. If you want the default setting for `active_schema`, use `public`.
 
-(Optional) `-s, --split`: Split the output. For GeoPackage, create one gpkg per feature (this isn't especially useful, but you may want to isolate layers to share). For PostGIS, send contents of each thematic gdb to its own schema. The schema name must already exist and match the input gdb name (e.g. "admin", "hydro", "politicl").
+(Optional, GeoPackage mode only) `-s, --split`: Split the output. For GeoPackage, create one gpkg per feature (this isn't especially useful, but you may want to isolate layers to share).
 
 ### Examples
 - Convert all FileGDBs in a directory to GeoPackages: `convert_kingco_gdbs.py ~/kcgis/gdb GPKG ~/kcgis/gpkg`
