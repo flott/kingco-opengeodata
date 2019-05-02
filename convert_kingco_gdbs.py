@@ -78,7 +78,7 @@ Output is either a file or directory of GeoPackages or PostGIS tables.
 #    ogr2ogr -f PostgreSQL [GLOBAL OPTIONS] [PG OPTIONS]
 #       admin.gdb
 #
-# 4. PostGIS (multiple schema)
+# 4. PostGIS (multiple schema) - NO REASON FOR THIS! REMOVE THIS OPTION
 #    Called when --split==True
 #    Create the schemas ahead of time. (ex: CREATE SCHEMA yourschema;)
 #    Loop through themes, set active_schema, export theme layers.
@@ -109,7 +109,7 @@ import argparse
 import os
 import glob
 import fiona
-import re
+# import re
 import subprocess
 
 # set some overall ogr2ogr options
@@ -151,21 +151,13 @@ parser.add_argument('dest', type=str, help="""Output location. For GeoPackage,
                     "PG:dbname=databasename host=addr port=5432
                     user=x password=y active_schema=public"
                     Double quotes around the connection string are required.
-                    If --split is used, the active schema will be changed
-                    for each source geodatabase.
                     """)
 
-# expected behavior: make one geopackage per feature.
-# if postgis, ignore. it has to cycle through all layers regardless.
 parser.add_argument(
     '-s',
     '--split',
     action='store_true',
-    help="""Split the output. For GeoPackage, create one gpkg per feature.
-         For PostGIS, send contents of each thematic GDB to its own schema.
-         The schema name must already exist and match the theme name
-         (e.g. admin, hydro, politicl).
-         """)
+    help="Split the output (GeoPackage only). Create one gpkg per feature.")
 
 args = parser.parse_args()
 
@@ -213,17 +205,17 @@ for gdb in gdb_paths:
                            + [gdb] + [layer])
 
     # gdb to one postgres schema
-    elif args.format == 'PostgreSQL' and not args.split:
+    elif args.format == 'PostgreSQL':
         subprocess.run(["ogr2ogr", "-f", args.format]
                        + opts_ogr2ogr + opts_pg
                        + [args.dest]
                        + [gdb])
 
-    # gdb to multiple postgres schemas
-    elif args.format == 'PostgreSQL' and args.split:
-        pgconn = re.sub(r"active_schema=(\w+)",
-                        "active_schema=" + theme, args.dest)
-        subprocess.run(["ogr2ogr", "-f", args.format]
-                       + opts_ogr2ogr + opts_pg
-                       + [pgconn]
-                       + [gdb])
+    # # gdb to multiple postgres schemas
+    # elif args.format == 'PostgreSQL' and args.split:
+    #     pgconn = re.sub(r"active_schema=(\w+)",
+    #                     "active_schema=" + theme, args.dest)
+    #     subprocess.run(["ogr2ogr", "-f", args.format]
+    #                    + opts_ogr2ogr + opts_pg
+    #                    + [pgconn]
+    #                    + [gdb])
