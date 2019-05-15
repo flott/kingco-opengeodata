@@ -1,5 +1,0 @@
-1: kingsh_area (Multi Polygon)
-2: tribal_lands_area (Multi Polygon)
-3: washco_area (Multi Polygon)
-4: washsh_area (Multi Polygon)
-5: kingco_area (Multi Polygon)

@@ -1,2 +1,0 @@
-1: reg_psctr020_line (Multi Line String)
-2: mtpeaks_point (Point)
