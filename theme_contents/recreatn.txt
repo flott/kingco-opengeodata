@@ -1,0 +1,6 @@
+1: parkopdist_area (Multi Polygon)
+2: trail_line (Multi Line String)
+3: park_facility_point (Point)
+4: park_area (Multi Polygon)
+5: park_label_point (Point)
+6: park_property_area (Multi Polygon)

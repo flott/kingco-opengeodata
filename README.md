@@ -13,25 +13,25 @@ For local, file-based use, there is [GeoPackage](http://www.geopackage.org/) out
 
 ## 1. Downloading and organizing the data
 
-`get_kingco_gdbs.py` will download any of the available themes. More information and a full layer list is available on King County's [Data Portal](https://www5.kingcounty.gov/gisdataportal/) or [Metadata pages](https://www.kingcounty.gov/services/gis/GISData/metadata.aspx).
+`get_kingco_gdbs.py` will download any of the available themes. The links below and the text files in the `theme_contents` directory show the layers inside the thematic FileGDBs. More metadata is available on King County's [Data Portal](https://www5.kingcounty.gov/gisdataportal/) or [Metadata pages](https://www.kingcounty.gov/services/gis/GISData/metadata.aspx).
 
 | Theme name | Content | Layers | Uncompressed Size 
 |---|---|---:|---:|
-| admin | Administrative | 14 | 303 MB
-| census | Census boundaries and tables | 285 | 920 MB
-| district | District boundaries | 23 | 28 MB
-| enviro | Environmental | 35 | 1389 MB
-| hydro | Hydrography | 25 | 100 MB
-| natres | Natural Resources | 11 | 11 MB
-| planning | Planning | 22 | 121 MB
-| politicl | Political boundaries | 5 | 5 MB
-| property | Property | 12 | 789 MB
-| pubsafe | Public Safety | 9 | 82 MB
-| recreatn | Recreation | 6 | 17 MB
-| survey | Survey | 30 | 1048 MB
-| topo | Topography | 2 | 519 MB
-| transportation | Transportation | 96 | 1102 MB
-| utility | Utilities | 15 | 34 MB
+| [admin](theme_contents/admin.txt) | Administrative | 14 | 303 MB
+| [census](theme_contents/census.txt) | Census boundaries and tables | 285 | 920 MB
+| [district](theme_contents/district.txt) | District boundaries | 23 | 28 MB
+| [enviro](theme_contents/enviro.txt) | Environmental | 35 | 1389 MB
+| [hydro](theme_contents/hydro.txt) | Hydrography | 25 | 100 MB
+| [natres](theme_contents/natres.txt) | Natural Resources | 11 | 11 MB
+| [planning](theme_contents/planning.txt) | Planning | 22 | 121 MB
+| [politicl](theme_contents/politicl.txt) | Political boundaries | 5 | 5 MB
+| [property](theme_contents/property.txt) | Property | 12 | 789 MB
+| [pubsafe](theme_contents/pubsafe.txt) | Public Safety | 9 | 82 MB
+| [recreatn](theme_contents/recreatn.txt) | Recreation | 6 | 17 MB
+| [survey](theme_contents/survey.txt) | Survey | 30 | 1048 MB
+| [topo](theme_contents/topo.txt) | Topography | 2 | 519 MB
+| [transportation](theme_contents/transportation.txt) | Transportation | 96 | 1102 MB
+| [utility](theme_contents/utility.txt) | Utilities | 15 | 34 MB
 
 The script requires an output directory, and has three download options:
 
