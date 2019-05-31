@@ -13,25 +13,30 @@ For local, file-based use, there is [GeoPackage](http://www.geopackage.org/) out
 
 ## 1. Downloading and organizing the data
 
-`get_kingco_gdbs.py` will download any of the available themes. More information and a full layer list is available on King County's [Data Portal](https://www5.kingcounty.gov/gisdataportal/) or [Metadata pages](https://www.kingcounty.gov/services/gis/GISData/metadata.aspx).
+`get_kingco_gdbs.py` will download any of the available [themes](http://www5.kingcounty.gov/sdc/addl_doc/SDCSubjectAreaDescriptions.htm).
 
-| Theme name | Content |
-|---|---|
-| admin | Administrative |
-| census | Census boundaries and tables |
-| district | District boundaries |
-| enviro | Environmental |
-| hydro | Hydrography |
-| natres | Natural Resources |
-| planning | Planning |
-| politicl | Political boundaries |
-| property | Property |
-| pubsafe | Public Safety |
-| recreatn | Recreation |
-| survey | Survey |
-| topo | Topography |
-| transportation | Transportation |
-| utility | Utilities |
+
+A [list of the layers](layer_list.md) inside the thematic FileGDBs and metadata links are available in `layer_list.md`.
+
+For more information, see the [KCGIS Metadata page](https://www.kingcounty.gov/services/gis/GISData/metadata.aspx).
+
+| Theme name | Content | Layers | Uncompressed Size 
+|---|---|---:|---:|
+| admin | Administrative | 14 | 303 MB
+| census | Census boundaries and tables | 285 | 920 MB
+| district | District boundaries | 23 | 28 MB
+| enviro | Environmental | 35 | 1389 MB
+| hydro | Hydrography | 25 | 100 MB
+| natres | Natural Resources | 11 | 11 MB
+| planning | Planning | 22 | 121 MB
+| politicl | Political boundaries | 5 | 5 MB
+| property | Property | 12 | 789 MB
+| pubsafe | Public Safety | 9 | 82 MB
+| recreatn | Recreation | 6 | 17 MB
+| survey | Survey | 30 | 1048 MB
+| topo | Topography | 2 | 519 MB
+| transportation | Transportation | 96 | 1102 MB
+| utility | Utilities | 15 | 34 MB
 
 The script requires an output directory, and has three download options:
 

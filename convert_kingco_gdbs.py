@@ -118,7 +118,7 @@ opts_ogr2ogr = ["-progress", "-a_srs", "EPSG:2926",
 # geopackage driver options
 opts_gpkg = ["-dsco", "VERSION=1.2", "-lco", "OVERWRITE=YES", "-gt", "65536"]
 # postgresql/postgis driver options
-opts_pg = []  # ["-lco", "SPATIAL_INDEX=GIST"]
+opts_pg = ["-lco", "GEOMETRY_NAME=geom"]
 
 
 # this will be the function for a single input and output feature
