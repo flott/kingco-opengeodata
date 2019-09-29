@@ -16,9 +16,8 @@ import glob
 import subprocess
 
 # set some overall ogr2ogr options
-opts_ogr2ogr = ["-progress",
-                "-f", "GPKG",
-                "-a_srs", "EPSG:2926",
+opts_ogr2ogr = ["-f", "GPKG",
+                "-progress",
                 "-append"]
 
 # geopackage driver options
@@ -56,5 +55,6 @@ if os.path.exists(dest):
     print('Destination geopackage exists.')
 
 for gpkg in gpkg_paths:
+    print('Merging {}...'.format(os.path.split(gpkg)[1]))
     subprocess.run(["ogr2ogr"] + opts_ogr2ogr + opts_gpkg
                     + [dest, gpkg])
