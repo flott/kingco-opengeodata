@@ -3,6 +3,7 @@
 """
 Reads a directory of geopackages and
 merges all of the files into a single output geopackage.
+usage: merge_gpkgs.py /path/to/gpkgs output.gpkg
 """
 
 # Requires Python 3.5+
