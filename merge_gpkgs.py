@@ -49,8 +49,8 @@ if not os.path.isdir(src):
     raise ValueError('Source directory does not exist.')
 
 gpkg_paths = glob.glob(os.path.join(src, "*.gpkg"))
-    if not gpkg:
-        raise ValueError('No geopackages found in source directory.')
+if not gpkg_paths:
+    raise ValueError('No geopackages found in source directory.')
 
 if os.path.exists(dest):
     print('Destination geopackage exists.')
