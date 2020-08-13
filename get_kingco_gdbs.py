@@ -86,7 +86,7 @@ for theme in themes:
     print("Downloading {}...".format(theme))
     zipf = theme + 'GDB.zip'
     # if using urllib instead:
-    zip_url = 'ftp://ftp.kingcounty.gov/gis-web/GISData/' + zipf
+    zip_url = 'https://aqua.kingcounty.gov/gis/web/GISData/' + zipf
     data = urllib.request.urlopen(zip_url).read()
     with open(os.path.join(zip_dir, theme + 'GDB.zip'), 'wb') as local_file:
         local_file.write(data)
